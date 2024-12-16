@@ -39,9 +39,17 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    private string? errorMessage;
 
     protected override async Task OnInitializedAsync()
     {
-        forecasts = await ForecastClient.GetForecastAsync(DateTime.Now);
+        try
+        {
+            forecasts = await ForecastClient.GetForecastAsync(DateTime.Now);
+        }
+        catch (Exception ex)
+        {
+            errorMessage = "An error occurred while loading data.";
+        }
     }
 }

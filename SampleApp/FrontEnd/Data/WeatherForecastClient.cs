@@ -12,6 +12,17 @@ namespace FrontEnd.Data
         }
 
         public async Task<WeatherForecast[]> GetForecastAsync(DateTime? startDate)
-            => await _httpClient.GetFromJsonAsync<WeatherForecast[]>($"WeatherForecast?startDate={startDate}");
+        {
+            var query = startDate.HasValue ? $"WeatherForecast?startDate={startDate}" : "WeatherForecast";
+            try
+            {
+                return await _httpClient.GetFromJsonAsync<WeatherForecast[]>(query);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching weather forecasts.");
+                throw;
+            }
+        }
     }
 }
